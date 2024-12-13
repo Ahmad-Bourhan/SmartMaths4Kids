@@ -13,8 +13,8 @@
 ActiveRecord::Schema[7.2].define(version: 2024_12_05_040258) do
   create_table "profiles", force: :cascade do |t|
     t.integer "usre_id"
-    t.string "firstName"
-    t.string "lastName"
+    t.string "first_name"
+    t.string "last_name"
     t.integer "age"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
