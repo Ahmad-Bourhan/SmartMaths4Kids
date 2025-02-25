@@ -84,6 +84,9 @@ jobs:
       - name: Fix execution permissions for scripts
         run: chmod +x bin/*
 
+      - name: Migrate the test database  # ✅ FIXED INDENTATION
+        run: bundle exec rails db:migrate RAILS_ENV=test
+
       - name: Run tests
         env:
           RAILS_ENV: test
