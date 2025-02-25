@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_16_011831) do
-  create_table "20241205040258_create_questions", id: false, force: :cascade do |t|
-    t.text "class CreateQuestions < ActiveRecord::Migration[7.2]"
-  end
-
+ActiveRecord::Schema[7.2].define(version: 2025_02_25_024143) do
   create_table "profiles", force: :cascade do |t|
     t.integer "user_id"
     t.string "first_name"
@@ -22,6 +18,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_011831) do
     t.integer "age"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "firstName"
+    t.string "lastName"
   end
 
   create_table "questions", force: :cascade do |t|
