@@ -17,16 +17,20 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.6
-          bundler-cache: true
+          bundler-cache: false  # Force fresh install
+
+      - name: Install Bundler
+        run: gem install bundler
 
       - name: Install Dependencies
-        run: bundle install --jobs 4 --retry 3
+        run: |
+          bundle install --no-cache --jobs 4 --retry 3
 
       - name: Fix execution permissions for scripts
         run: chmod +x bin/*
 
       - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bundle exec brakeman --no-pager  # Use `bundle exec`
+        run: bundle exec brakeman --no-pager
 
   lint:
     runs-on: ubuntu-latest
@@ -39,16 +43,20 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.6
-          bundler-cache: true
+          bundler-cache: false
+
+      - name: Install Bundler
+        run: gem install bundler
 
       - name: Install Dependencies
-        run: bundle install --jobs 4 --retry 3
+        run: |
+          bundle install --no-cache --jobs 4 --retry 3
 
       - name: Fix execution permissions for scripts
         run: chmod +x bin/*
 
       - name: Lint code for consistent style
-        run: bundle exec rubocop -f github  # Use `bundle exec`
+        run: bundle exec rubocop -f github
 
   test:
     runs-on: ubuntu-latest
@@ -64,10 +72,14 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.6
-          bundler-cache: true
+          bundler-cache: false
+
+      - name: Install Bundler
+        run: gem install bundler
 
       - name: Install Dependencies
-        run: bundle install --jobs 4 --retry 3
+        run: |
+          bundle install --no-cache --jobs 4 --retry 3
 
       - name: Fix execution permissions for scripts
         run: chmod +x bin/*
@@ -75,4 +87,4 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
-        run: bundle exec rails db:test:prepare && bundle exec rails test test:system  # Use `bundle exec`
+        run: bundle exec rails db:test:prepare && bundle exec rails test test:system
