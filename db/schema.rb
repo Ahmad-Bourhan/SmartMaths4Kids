@@ -10,16 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_25_165256) do
-  create_table "profiles", force: :cascade do |t|
-    t.integer "user_id"
-    t.string "first_name"
-    t.string "last_name"
-    t.integer "age"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
+ActiveRecord::Schema[7.2].define(version: 2025_02_25_233650) do
   create_table "questions", force: :cascade do |t|
     t.text "question_text"
     t.integer "difficulty_level"
