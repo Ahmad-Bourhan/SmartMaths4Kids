@@ -4,7 +4,13 @@ class QuestionsController < ApplicationController
   # GET /questions or /questions.json
   def index
     @questions = Question.all
+    @difficulty_data = {
+      "Easy" => Question.where(difficulty_level: 1).count,
+      "Medium" => Question.where(difficulty_level: 2).count,
+      "Hard" => Question.where(difficulty_level: 3).count
+    }
   end
+  
 
   # GET /questions/1 or /questions/1.json
   def show
@@ -56,6 +62,7 @@ class QuestionsController < ApplicationController
       format.json { head :no_content }
     end
   end
+   
 
   private
     # Use callbacks to share common setup or constraints between actions.

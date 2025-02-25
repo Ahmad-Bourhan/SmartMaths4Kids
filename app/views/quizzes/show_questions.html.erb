@@ -1,0 +1,11 @@
+<h1>Quiz: Level <%= @level %></h1>
+
+<%= form_with url: quiz_submit_all_path, method: :post do %>
+  <% @questions.each do |question| %>
+    <div>
+      <p><strong><%= question.question_text %></strong></p>
+      <%= text_field_tag "answers[#{question.id}]", nil, placeholder: "Your Answer" %>
+    </div>
+  <% end %>
+  <%= submit_tag "Submit Quiz" %>
+<% end %>

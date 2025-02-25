@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_05_040258) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_16_011831) do
+  create_table "20241205040258_create_questions", id: false, force: :cascade do |t|
+    t.text "class CreateQuestions < ActiveRecord::Migration[7.2]"
+  end
+
   create_table "profiles", force: :cascade do |t|
     t.integer "usre_id"
     t.string "first_name"
@@ -29,6 +33,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_05_040258) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "scores", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "score"
+    t.datetime "attempted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_scores_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -40,4 +53,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_05_040258) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "scores", "users"
 end

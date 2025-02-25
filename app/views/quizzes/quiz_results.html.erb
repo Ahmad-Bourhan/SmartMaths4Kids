@@ -1,0 +1,21 @@
+<h1>Quiz Results</h1>
+
+<p><strong>Total Score:</strong> <%= @total_score %> points</p>
+
+<h2>Summary:</h2>
+<p>Thank you for completing the quiz!</p>
+
+<% if @incorrect_questions.any? %>
+  <h3>Incorrect Questions:</h3>
+  <ul>
+    <% @incorrect_questions.each do |entry| %>
+      <li>
+        <strong>Question:</strong> <%= entry[:question].question_text %><br>
+        <strong>Your Answer:</strong> <%= entry[:user_answer] %><br>
+        <strong>Correct Answer:</strong> <%= entry[:question].correct_answer %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Congratulations! All your answers were correct.</p>
+<% end %>

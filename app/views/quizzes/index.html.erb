@@ -1,0 +1,7 @@
+<h1>Choose a Level</h1>
+
+<% @levels.each do |level| %>
+  <%= form_with url: quiz_start_path(level: level), method: :post do %>
+    <button><%= "Level #{level}" %></button>
+  <% end %>
+<% end %>
