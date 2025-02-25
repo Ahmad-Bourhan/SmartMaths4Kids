@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install packages
+      - name: Install system dependencies
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips sqlite3
 
       - name: Checkout code
@@ -84,8 +84,11 @@ jobs:
       - name: Fix execution permissions for scripts
         run: chmod +x bin/*
 
-      - name: Migrate the test database  # ✅ FIXED INDENTATION
-        run: bundle exec rails db:migrate RAILS_ENV=test
+      - name: Reset and migrate test database  # ✅ Ensures test DB is fresh before running tests
+        run: |
+          bundle exec rails db:drop RAILS_ENV=test || true
+          bundle exec rails db:create RAILS_ENV=test
+          bundle exec rails db:migrate RAILS_ENV=test
 
       - name: Run tests
         env:
