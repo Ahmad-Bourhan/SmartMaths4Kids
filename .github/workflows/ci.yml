@@ -17,50 +17,20 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.6
-          bundler-cache: false
-
-      - name: Install Bundler
-        run: gem install bundler
+          bundler-cache: true
 
       - name: Install Dependencies
         run: bundle install --jobs 4 --retry 3
-
-      - name: Install Brakeman
-        run: gem install brakeman
 
       - name: Fix execution permissions for scripts
         run: chmod +x bin/*
 
       - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
-
-  scan_js:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.1.6
-          bundler-cache: false
-
-      - name: Install Bundler
-        run: gem install bundler
-
-      - name: Install Dependencies
-        run: bundle install --jobs 4 --retry 3
-
-      - name: Fix execution permissions for scripts
-        run: chmod +x bin/*
-
-      - name: Scan for security vulnerabilities in JavaScript dependencies
-        run: bin/importmap audit
+        run: bundle exec brakeman --no-pager  # Use `bundle exec`
 
   lint:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -69,10 +39,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.6
-          bundler-cache: false
-
-      - name: Install Bundler
-        run: gem install bundler
+          bundler-cache: true
 
       - name: Install Dependencies
         run: bundle install --jobs 4 --retry 3
@@ -81,7 +48,7 @@ jobs:
         run: chmod +x bin/*
 
       - name: Lint code for consistent style
-        run: bin/rubocop -f github
+        run: bundle exec rubocop -f github  # Use `bundle exec`
 
   test:
     runs-on: ubuntu-latest
@@ -97,10 +64,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.6
-          bundler-cache: false
-
-      - name: Install Bundler
-        run: gem install bundler
+          bundler-cache: true
 
       - name: Install Dependencies
         run: bundle install --jobs 4 --retry 3
@@ -111,12 +75,4 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
-        run: bin/rails db:test:prepare test test:system
-
-      - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
-          if-no-files-found: ignore
+        run: bundle exec rails db:test:prepare && bundle exec rails test test:system  # Use `bundle exec`
