@@ -13,14 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Clean Bundler Cache
-        run: bundle clean --force
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.6
-          bundler-cache: false  # Disable caching to fix dependency issues
+          bundler-cache: false
 
       - name: Install Bundler
         run: gem install bundler
@@ -31,8 +28,8 @@ jobs:
       - name: Install Brakeman
         run: gem install brakeman
 
-      - name: Fix permissions for Brakeman
-        run: chmod +x bin/brakeman
+      - name: Fix execution permissions for scripts
+        run: chmod +x bin/*
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
@@ -56,6 +53,9 @@ jobs:
       - name: Install Dependencies
         run: bundle install --jobs 4 --retry 3
 
+      - name: Fix execution permissions for scripts
+        run: chmod +x bin/*
+
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
 
@@ -76,6 +76,9 @@ jobs:
 
       - name: Install Dependencies
         run: bundle install --jobs 4 --retry 3
+
+      - name: Fix execution permissions for scripts
+        run: chmod +x bin/*
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
@@ -101,6 +104,9 @@ jobs:
 
       - name: Install Dependencies
         run: bundle install --jobs 4 --retry 3
+
+      - name: Fix execution permissions for scripts
+        run: chmod +x bin/*
 
       - name: Run tests
         env:
