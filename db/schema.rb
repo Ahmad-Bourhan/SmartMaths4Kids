@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_011831) do
   end
 
   create_table "profiles", force: :cascade do |t|
-    t.integer "usre_id"
+    t.integer "user_id"
     t.string "first_name"
     t.string "last_name"
     t.integer "age"
