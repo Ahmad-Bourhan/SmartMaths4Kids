@@ -13,11 +13,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Clean Bundler Cache
+        run: bundle clean --force
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1  # Replace with your Ruby version
-          bundler-cache: true
+          ruby-version: 3.1.6
+          bundler-cache: false  # Disable caching to fix dependency issues
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Install Dependencies
+        run: bundle install --jobs 4 --retry 3
 
       - name: Install Brakeman
         run: gem install brakeman
@@ -38,8 +47,14 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1
-          bundler-cache: true
+          ruby-version: 3.1.6
+          bundler-cache: false
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Install Dependencies
+        run: bundle install --jobs 4 --retry 3
 
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
@@ -53,8 +68,14 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1
-          bundler-cache: true
+          ruby-version: 3.1.6
+          bundler-cache: false
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Install Dependencies
+        run: bundle install --jobs 4 --retry 3
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
@@ -72,8 +93,14 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1
-          bundler-cache: true
+          ruby-version: 3.1.6
+          bundler-cache: false
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Install Dependencies
+        run: bundle install --jobs 4 --retry 3
 
       - name: Run tests
         env:
