@@ -1,0 +1,25 @@
+<h1>Profile Details</h1>
+
+<p>
+  <strong>First Name:</strong>
+  <%= @profile.first_name %>
+</p>
+
+<p>
+  <strong>Last Name:</strong>
+  <%= @profile.last_name %>
+</p>
+
+<p>
+  <strong>Age:</strong>
+  <%= @profile.age %>
+</p>
+
+<p>
+  <strong>User ID:</strong>
+  <%= @profile.user_id %>
+</p>
+
+<%= link_to 'Edit', edit_profile_path(@profile) %> |
+<%= link_to 'Back', profiles_path %> |
+<%= link_to 'Delete', profile_path(@profile), method: :delete, data: { confirm: 'Are you sure?' } %>
