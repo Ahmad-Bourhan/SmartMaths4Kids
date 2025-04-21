@@ -1,0 +1,92 @@
+<h1 class="text-center my-4">🧠 Magic Math Mind Reader</h1>
+
+<div class="text-center mb-4">
+  <%= link_to '🏠 Home', root_path, class: 'btn btn-primary' %>
+</div>
+
+<p class="text-center">Think of a number between <strong>1 and 63</strong>. Select all the sets that contain your number, then press the button to guess it!</p>
+
+<div class="set-container d-flex flex-wrap justify-content-center">
+  <%= [["A", 1], ["B", 16], ["C", 4], ["D", 8], ["E", 32], ["F", 2]].map do |set, val|
+        content_tag(:div, class: "set m-2 shadow-sm") do
+          check = tag.label(class: "form-check-label d-block mb-2") do
+            check_box_tag("set#{set}", val, false, id: "set#{set}", class: "form-check-input me-2") +
+            "Set #{set}"
+          end
+          numbers = content_tag(:div, class: "numbers d-grid gap-1") do
+            (1..63).select { |n| (n & val) === val }.map { |i| content_tag(:div, i, class: "px-2 py-1 rounded bg-light") }.join.html_safe
+          end
+          check + content_tag(:h3, "Set #{set}", class: "mt-2") + numbers
+        end
+      end.join.html_safe %>
+</div>
+
+<div class="text-center my-4">
+  <button class="btn btn-success" onclick="calculateNumber()">🔮 Find My Number</button>
+</div>
+
+<div id="result" class="text-center fs-4 mb-3"></div>
+
+<div id="confirmation" class="text-center hidden">
+  <p>Is this your number? 🤔</p>
+  <button class="btn btn-primary me-2" onclick="confirmAnswer(true)">Yes ✅</button>
+  <button class="btn btn-danger" onclick="confirmAnswer(false)">No ❌</button>
+</div>
+
+<div id="final-message" class="text-center mt-4 hidden"></div>
+
+<script>
+  const sets = { A: 1, B: 16, C: 4, D: 8, E: 32, F: 2 };
+
+  function calculateNumber() {
+    let sum = 0;
+    let selected = false;
+
+    for (const key in sets) {
+      const checkbox = document.getElementById('set' + key);
+      if (checkbox.checked) {
+        selected = true;
+        sum += sets[key];
+      }
+    }
+
+    if (!selected) {
+      document.getElementById('result').innerText = '❗ Please select the sets that contain your number.';
+      document.getElementById('confirmation').classList.add('hidden');
+      document.getElementById('final-message').classList.add('hidden');
+      return;
+    }
+
+    document.getElementById('result').innerText = '🔢 Your number is: ' + sum;
+    document.getElementById('confirmation').classList.remove('hidden');
+    document.getElementById('final-message').classList.add('hidden');
+  }
+
+  function confirmAnswer(isCorrect) {
+    const finalMsg = document.getElementById('final-message');
+    if (isCorrect) {
+      finalMsg.innerHTML = `
+        <p>🎉 Thank you! 😊</p>
+        <button class="btn btn-success mt-2" onclick="resetGame()">🔁 Try Again</button>
+      `;
+    } else {
+      finalMsg.innerHTML = `
+        <p>❗ Please make sure to select <strong>all sets</strong> that contain your number.</p>
+        <button class="btn btn-warning mt-2" onclick="resetGame()">🔁 Try Again</button>
+      `;
+    }
+
+    finalMsg.classList.remove('hidden');
+    document.getElementById('confirmation').classList.add('hidden');
+  }
+
+  function resetGame() {
+    for (const key in sets) {
+      document.getElementById('set' + key).checked = false;
+    }
+
+    document.getElementById('result').innerText = '';
+    document.getElementById('confirmation').classList.add('hidden');
+    document.getElementById('final-message').classList.add('hidden');
+  }
+</script>

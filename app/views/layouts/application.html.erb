@@ -14,40 +14,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet">
 
     <!-- Custom Style -->
-    <style>
-      body {
-        font-family: 'Nunito', sans-serif;
-        background-color: #f9fafb;
-        color: #333;
-      }
-
-      .navbar {
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      }
-
-      .navbar-brand {
-        font-weight: 800;
-        font-size: 1.4rem;
-      }
-
-      .content-wrapper {
-        padding-top: 20px;
-        padding-bottom: 40px;
-      }
-
-      .alert {
-        border-radius: 0.5rem;
-      }
-
-      footer {
-        padding: 20px 0;
-        text-align: center;
-        color: #aaa;
-        font-size: 0.9rem;
-      }
+    
     </style>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "math_styles", media: "all", "data-turbo-track": "reload" %>
+
     <%= javascript_importmap_tags %>
   </head>
 

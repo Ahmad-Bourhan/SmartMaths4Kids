@@ -1,38 +1,34 @@
-<%= form_with(model: question) do |form| %>
+<%= form_with(model: question, local: true, class: "needs-validation") do |form| %>
   <% if question.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(question.errors.count, "error") %> prohibited this question from being saved:</h2>
-
+    <div class="alert alert-danger">
+      <h5><%= pluralize(question.errors.count, "error") %> prevented this question from being saved:</h5>
       <ul>
-        <% question.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+        <% question.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :question_text, style: "display: block" %>
-    <%= form.text_area :question_text %>
+  <div class="mb-3">
+    <%= form.label :question_text, "📝 Question Text", class: "form-label" %>
+    <%= form.text_area :question_text, rows: 3, class: "form-control", placeholder: "Enter the question..." %>
   </div>
 
-  <div>
-    <%= form.label :difficulty_level, style: "display: block" %>
-    <%= form.number_field :difficulty_level %>
+  <div class="mb-3">
+    <%= form.label :difficulty_level, "⚙️ Difficulty Level", class: "form-label" %>
+    <%= form.number_field :difficulty_level, in: 1..3, class: "form-control", placeholder: "1 (easy) to 3 (hard)" %>
   </div>
 
-  <div>
-    <%= form.label :correct_answer, style: "display: block" %>
-    <%= form.text_field :correct_answer %>
+  <div class="mb-3">
+    <%= form.label :correct_answer, "✅ Correct Answer", class: "form-label" %>
+    <%= form.text_field :correct_answer, class: "form-control", placeholder: "e.g. 42" %>
   </div>
 
-  <div>
-    <%= form.label :mark, style: "display: block" %>
-    <%= form.select :mark, (1..5).to_a, {}, { class: "form-control" } %>
-  </div>
-  
-  <div>
-    <%= form.submit %>
+  <div class="mb-4">
+    <%= form.label :mark, "🏅 Mark", class: "form-label" %>
+    <%= form.select :mark, (1..5).to_a, {}, { class: "form-select" } %>
   </div>
 
+  <%= form.submit "💾 Save Question", class: "btn btn-success" %>
 <% end %>

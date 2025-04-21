@@ -1,0 +1,134 @@
+<div class="addition-wrapper">
+  <header class="header-banner">
+    <h1>➖ Let Us Learn Subtraction! 🎯</h1>
+  </header>
+
+  <div class="btn-bar">
+    <%= link_to '🏠 Home', root_path, class: 'btn' %>
+  </div>
+
+  <div class="challenge-box">
+    <button class="btn start-btn" onclick="startSubChallenge()">▶️ Start Challenge</button>
+
+    <div id="sub-challenge" class="hidden challenge-content">
+      <p id="sub-question" class="question-text"></p>
+      <input type="number" id="sub-answer" class="answer-input" onkeypress="checkSubEnter(event)" />
+      <button class="btn submit-btn" onclick="submitSubAnswer()">Submit</button>
+      <p id="sub-timer" class="timer"></p>
+    </div>
+
+    <p id="sub-result" class="hidden result-msg"></p>
+    <div id="sub-final-score" class="hidden score-msg mt-4"></div>
+
+    <div id="sub-review-section" class="hidden mt-4 text-start px-3">
+      <h4>❌ Review of Wrong Answers:</h4>
+      <ul id="sub-wrong-list" class="list-group"></ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  let subNum1, subNum2, correctSubAnswer, subQuestionTimer, subChallengeTimer;
+  let subScore = 0;
+  let subTotal = 0;
+  let subTimeLeft = 60;
+  let subAnswerTime = 5;
+  let subWrongAnswers = [];
+
+  function startSubChallenge() {
+    clearInterval(subChallengeTimer);
+    clearTimeout(subQuestionTimer);
+
+    subScore = 0;
+    subTotal = 0;
+    subTimeLeft = 60;
+    subWrongAnswers = [];
+
+    document.getElementById('sub-final-score').classList.add('hidden');
+    document.getElementById('sub-review-section').classList.add('hidden');
+    document.getElementById('sub-wrong-list').innerHTML = '';
+    document.getElementById('sub-result').classList.add('hidden');
+
+    document.getElementById('sub-challenge').classList.remove('hidden');
+
+    startSubQuestion();
+
+    subChallengeTimer = setInterval(() => {
+      subTimeLeft--;
+      document.getElementById('sub-timer').innerText = `⏳ Time Left: ${subTimeLeft}s`;
+      if (subTimeLeft <= 0) {
+        clearInterval(subChallengeTimer);
+        endSubChallenge();
+      }
+    }, 1000);
+  }
+
+  function startSubQuestion() {
+    subNum1 = Math.floor(Math.random() * 50);
+    subNum2 = Math.floor(Math.random() * 50);
+    if (subNum1 < subNum2) [subNum1, subNum2] = [subNum2, subNum1];
+
+    correctSubAnswer = subNum1 - subNum2;
+
+    document.getElementById('sub-question').innerText = `What is ${subNum1} - ${subNum2}?`;
+    document.getElementById('sub-answer').value = '';
+    document.getElementById('sub-answer').focus();
+
+    clearTimeout(subQuestionTimer);
+    subQuestionTimer = setTimeout(() => {
+      checkSubAnswer(false);
+      if (subTimeLeft > 0) startSubQuestion();
+    }, subAnswerTime * 1000);
+  }
+
+  function submitSubAnswer() {
+    checkSubAnswer(true);
+    if (subTimeLeft > 0) startSubQuestion();
+  }
+
+  function checkSubAnswer(submitted) {
+    clearTimeout(subQuestionTimer);
+    subTotal++;
+    const userAnswer = parseInt(document.getElementById('sub-answer').value, 10);
+    const result = document.getElementById('sub-result');
+
+    if (submitted && userAnswer === correctSubAnswer) {
+      subScore++;
+      result.innerText = "✅ Correct!";
+    } else {
+      const wrong = submitted
+        ? `${subNum1} - ${subNum2} = ${correctSubAnswer} (You answered: ${userAnswer})`
+        : `${subNum1} - ${subNum2} = ${correctSubAnswer} (No answer)`;
+      subWrongAnswers.push(wrong);
+      result.innerText = submitted
+        ? `❌ Incorrect! Correct answer was ${correctSubAnswer}`
+        : `⏰ Time is up! Correct answer was ${correctSubAnswer}`;
+    }
+
+    result.classList.remove('hidden');
+  }
+
+  function endSubChallenge() {
+    document.getElementById('sub-challenge').classList.add('hidden');
+
+    const percentage = subTotal > 0 ? Math.round((subScore / subTotal) * 100) : 0;
+    const summary = `🏁 Score: ${subScore}/${subTotal} — ✅ Correct Rate: ${percentage}%`;
+    document.getElementById('sub-final-score').innerText = summary;
+    document.getElementById('sub-final-score').classList.remove('hidden');
+
+    if (subWrongAnswers.length > 0) {
+      const list = document.getElementById('sub-wrong-list');
+      subWrongAnswers.forEach(item => {
+        const li = document.createElement('li');
+        li.classList.add("list-group-item");
+        li.innerText = item;
+        list.appendChild(li);
+      });
+      document.getElementById('sub-review-section').classList.remove('hidden');
+    }
+  }
+
+  function checkSubEnter(e) {
+    if (e.key === "Enter") submitSubAnswer();
+  }
+</script>

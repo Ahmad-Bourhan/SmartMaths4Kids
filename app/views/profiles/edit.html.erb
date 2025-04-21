@@ -1,3 +1,14 @@
-<h1>Edit Profile</h1>
-<%= render "form", profile: @profile %>
-<%= link_to 'Back', profiles_path %>
+<div class="container mt-5">
+  <div class="card shadow-lg">
+    <div class="card-header bg-primary text-white text-center">
+      <h2>✏️ Edit Profile</h2>
+    </div>
+    <div class="card-body">
+      <%= render "form", profile: @profile %>
+
+      <div class="text-center mt-4">
+        <%= link_to '🔙 Back to Profiles', profiles_path, class: 'btn btn-secondary' %>
+      </div>
+    </div>
+  </div>
+</div>

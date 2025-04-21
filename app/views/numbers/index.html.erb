@@ -1,0 +1,63 @@
+<div class="w-100" style="background: none; box-shadow: none;">
+  <header class="header-banner text-center py-3 mb-4" style="background-color: #4caf50; color: white; border-radius: 15px; margin: 30px auto; max-width: 960px;">
+    <h1>📜 Understanding Ancient Numerals</h1>
+  </header>
+
+  <div class="text-center mb-4">
+    <%= link_to "🏠 Home", root_path, class: "btn btn-primary" %>
+  </div>
+
+  <div class="px-4">
+
+    <!-- Egyptian Numerals Section -->
+    <article class="py-4 px-4 mb-5 border border-2 rounded shadow bg-white w-100">
+      <h2 class="text-success mb-3">🔺 Introduction to Egyptian Numerals</h2>
+      <%= image_tag "Ancient_Egypt_numbers.jpg", alt: "Egyptian Numerals", class: "img-fluid my-3 shadow-sm rounded" %>
+      <p>Egyptian numerals are a fascinating aspect of ancient Egyptian culture...</p>
+      <p>The basic symbols are simple yet elegant, and each has a unique representation:</p>
+
+      <div class="row text-center my-4">
+        <% ["1.png", "10.png", "100.png", "1000.png", "10000.png", "100000.png", "m.png"].each do |img| %>
+          <div class="col-6 col-md-3 col-lg-2 mb-4">
+            <div class="card border-0 shadow-sm p-2">
+              <%= image_tag img, alt: img.split('.').first, class: "img-thumbnail" %>
+              <p class="mt-2 text-muted"><%= img.split('.').first %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <p>The number 12,427, for instance, would be written by combining symbols...</p>
+      <p>Whether you're a student of history... Egyptian numerals offer a unique window into the past.</p>
+    </article>
+
+    <!-- Another Ancient Numeral System -->
+    <article class="py-4 px-4 mb-5 border border-2 rounded shadow bg-white w-100">
+      <h2 class="text-primary mb-3">🌍 Introduction to Another Ancient Numeral System</h2>
+      <%= image_tag "Ancient_Numbers.jpg", alt: "Ancient Numbers", class: "img-fluid my-3 shadow-sm rounded" %>
+      <p>Ancient numerals are a fascinating aspect of historical cultures...</p>
+      <ul class="list-group list-group-flush mb-3">
+        <li class="list-group-item">1 is represented by a specific symbol.</li>
+        <li class="list-group-item">10 is represented by a different symbol.</li>
+        <li class="list-group-item">100 is represented by another distinct symbol.</li>
+        <li class="list-group-item">1000 and larger numbers have their own unique symbols.</li>
+      </ul>
+      <p>Understanding and appreciating these numerals provides insight...</p>
+    </article>
+
+    <!-- Dot-Angle Numeral System -->
+    <article class="py-4 px-4 mb-5 border border-2 rounded shadow bg-white w-100">
+      <h2 class="text-warning mb-3">⚙️ Introduction to Dot-Angle Numeral System</h2>
+      <%= image_tag "Arabic_Numbers.jpg", alt: "Dot-Angle Numeral System", class: "img-fluid my-3 shadow-sm rounded" %>
+      <p>This numeral system uses a combination of dots and angles...</p>
+      <ul class="list-group list-group-flush mb-3">
+        <li class="list-group-item">1 is represented by a single line with a dot.</li>
+        <li class="list-group-item">2 is represented by two lines forming an angle with dots at the ends.</li>
+        <li class="list-group-item">3 is represented by three lines forming two angles with dots at the intersections.</li>
+        <li class="list-group-item">And so on for higher numbers.</li>
+      </ul>
+      <p>This system offers a unique way of understanding numerals...</p>
+    </article>
+
+  </div>
+</div>

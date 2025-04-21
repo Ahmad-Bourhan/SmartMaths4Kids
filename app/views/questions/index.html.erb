@@ -1,19 +1,55 @@
-<p style="color: green"><%= notice %></p>
+<p class="text-success"><%= notice %></p>
 
 <% content_for :title, "Questions" %>
 
-<h1>Questions</h1>
+<div class="d-flex justify-content-between align-items-center my-4">
+  <h1 class="mb-0">🧠 All Questions</h1>
+  <%= link_to "➕ New Question", new_question_path, class: "btn btn-primary" %>
+</div>
 
-<div id="questions">
+<div class="row row-cols-1 row-cols-md-2 g-4">
   <% @questions.each do |question| %>
-    <%= render question %>
-    <p>
-      <%= link_to "Show this question", question %>
-    </p>
+    <div class="col">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">📄 <%= question.question_text.truncate(50) %></h5>
+
+          <% level_label, level_color = case question.difficulty_level
+            when 1 then ["Easy", "success"]
+            when 2 then ["Medium", "warning"]
+            when 3 then ["Hard", "danger"]
+            else ["Unknown", "secondary"]
+          end %>
+
+          <p>
+            <strong>Difficulty:</strong>
+            <span class="badge bg-<%= level_color %>"><%= level_label %></span>
+          </p>
+
+          <p><strong>Correct Answer:</strong> <%= question.correct_answer %></p>
+          <p><strong>Mark:</strong> <%= question.mark %></p>
+
+          <div class="mt-3">
+            <%= link_to "👁️ Show", question_path(question), class: "btn btn-outline-secondary btn-sm" %>
+            <%= link_to "✏️ Edit", edit_question_path(question), class: "btn btn-outline-primary btn-sm ms-2" %>
+            <%= link_to "🗑️ Delete", question_path(question),
+                  method: :delete,
+                  data: { confirm: "Are you sure you want to delete this question?" },
+                  class: "btn btn-outline-danger btn-sm ms-2" %>
+          </div>
+        </div>
+      </div>
+    </div>
   <% end %>
 </div>
 
-<%= link_to "New question", new_question_path %>
+<hr class="my-5">
 
-<h2>Questions by Difficulty Level</h2>
-<%= pie_chart @difficulty_data %>
+<h2 class="mb-4">📊 Questions by Difficulty Level</h2>
+<div class="bg-white p-4 shadow-sm rounded">
+  <%= pie_chart @difficulty_data,
+      height: "300px",
+      colors: ["#4caf50", "#ff9800", "#f44336"],
+      donut: true,
+      library: { title: { text: "Difficulty Breakdown", display: true } } %>
+</div>

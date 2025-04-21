@@ -1,7 +1,14 @@
-<h1>Choose a Level</h1>
+<div class="text-center my-5">
+  <h1 class="mb-4">🎯 Choose a Difficulty Level</h1>
+  <p class="text-muted mb-5">Select your level to begin the quiz!</p>
 
-<% @levels.each do |level| %>
-  <%= form_with url: quiz_start_path(level: level), method: :post do %>
-    <button><%= "Level #{level}" %></button>
-  <% end %>
-<% end %>
+  <div class="d-flex flex-wrap justify-content-center gap-3">
+    <% @levels.each do |level| %>
+      <%= form_with url: quiz_start_path(level: level), method: :post, local: true do %>
+        <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+          Level <%= level %>
+        </button>
+      <% end %>
+    <% end %>
+  </div>
+</div>

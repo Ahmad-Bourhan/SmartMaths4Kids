@@ -1,20 +1,18 @@
+<div class="container-fluid w-100 px-0">
+  <div class="bg-light py-5 px-3 text-center" style="min-height: 100vh;">
+    <h1 class="display-4 mb-3 text-primary">🎓 Welcome to <strong>SmartMaths4Kids!</strong></h1>
+    <h4 class="mb-4 text-success">Learn Math the Fun Way! 🚀</h4>
+    <p class="mb-5">Join us on an exciting journey to master the basics of math. Choose a topic below to get started:</p>
 
-<body>
- 
-    <header>
-        <h1>Welcome to SmartMaths4Kids!</h1>
-    </header>
-    <div class="container">
-        <h2>Learn Math the Fun Way!</h2>
-        <p>Join us on an exciting journey to master the basics of math. Choose a topic below to get started:</p>
-        <a href="Numbers.html" class="btn">Numbers</a>
-        <a href="Addition.html" class="btn">Addition</a>
-        <a href="Subtraction.html" class="btn">Subtraction</a>
-        <a href="Multiplication.html" class="btn">Multiplication</a>
-        <a href="Division.html" class="btn">Division</a>
-        <a href="Game1.html" class="btn">Game1</a>
-        <a href="Magic Mind Reader.html" class="btn">Magic Mind Reader</a>
-        
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <%= link_to "🔢 Numbers", numbers_path, class: "btn btn-outline-primary btn-lg px-4" %>
+      <%= link_to "➕ Addition", addition_path, class: "btn btn-outline-success btn-lg px-4" %>
+      <%= link_to "➖ Subtraction", subtraction_path, class: "btn btn-outline-warning btn-lg px-4" %>
+      <%= link_to "✖️ Multiplication", multiplication_path, class: "btn btn-outline-danger btn-lg px-4" %>
+      <%= link_to "➗ Division", division_path, class: "btn btn-outline-dark btn-lg px-4" %>
+      <%= link_to "🧩 Magic Square Puzzle", game1_path, class: "btn btn-outline-info btn-lg px-4" %>
+      <%= link_to "🔮 Magic Mind Reader", magic_reader_path, class: "btn btn-outline-secondary btn-lg px-4" %>
     </div>
-</body>
-</html>
+  </div>
+</div>
+

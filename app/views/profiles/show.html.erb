@@ -1,25 +1,21 @@
-<h1>Profile Details</h1>
+<div class="container mt-5">
+  <div class="card shadow-lg">
+    <div class="card-header bg-primary text-white text-center">
+      <h2>👤 Profile Details</h2>
+    </div>
+    <div class="card-body">
 
-<p>
-  <strong>First Name:</strong>
-  <%= @profile.first_name %>
-</p>
+      <p><strong>🧑 First Name:</strong> <%= @profile.first_name %></p>
+      <p><strong>👪 Last Name:</strong> <%= @profile.last_name %></p>
+      <p><strong>🎂 Age:</strong> <%= @profile.age %></p>
+      <p><strong>🔑 User ID:</strong> <%= @profile.user_id %></p>
 
-<p>
-  <strong>Last Name:</strong>
-  <%= @profile.last_name %>
-</p>
+      <div class="mt-4 d-flex justify-content-center flex-wrap gap-2">
+        <%= link_to '✏️ Edit', edit_profile_path(@profile), class: 'btn btn-warning' %>
+        <%= link_to '⬅️ Back', profiles_path, class: 'btn btn-secondary' %>
+        <%= link_to '🗑️ Delete', profile_path(@profile), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+      </div>
 
-<p>
-  <strong>Age:</strong>
-  <%= @profile.age %>
-</p>
-
-<p>
-  <strong>User ID:</strong>
-  <%= @profile.user_id %>
-</p>
-
-<%= link_to 'Edit', edit_profile_path(@profile) %> |
-<%= link_to 'Back', profiles_path %> |
-<%= link_to 'Delete', profile_path(@profile), method: :delete, data: { confirm: 'Are you sure?' } %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,182 @@
+<div class="addition-wrapper">
+  <header class="header-banner">
+    <h1>✖️ Let Us Learn Multiplication! 🎯</h1>
+  </header>
+
+  <div class="btn-bar">
+    <%= link_to '🏠 Home', root_path, class: 'btn' %>
+  </div>
+
+  <div class="challenge-box">
+    <button class="btn start-btn" onclick="startMulChallenge()">▶️ Start Challenge</button>
+
+    <div id="mul-challenge" class="hidden challenge-content">
+      <p id="mul-question" class="question-text"></p>
+      <input type="number" id="mul-answer" class="answer-input" onkeypress="checkMulEnter(event)" />
+      <button class="btn submit-btn" onclick="submitMulAnswer()">Submit</button>
+      <p id="mul-timer" class="timer"></p>
+    </div>
+
+    <p id="mul-result" class="hidden result-msg"></p>
+    <div id="mul-final-score" class="hidden score-msg mt-4"></div>
+
+    <div id="mul-review-section" class="hidden mt-4 text-start px-3">
+      <h4>❌ Review of Wrong Answers:</h4>
+      <ul id="mul-wrong-list" class="list-group"></ul>
+    </div>
+  </div>
+
+  <hr style="margin: 40px 0;">
+
+  <div class="maze-section">
+    <h2>🧩 Number Doubling Maze</h2>
+    <p>Follow the numbers such that each next number is double the previous. Start from 1 and reach the goal!</p>
+    <div id="maze">
+      <% [1, 6, 10, 20, 40, 80, 2, 4, 8, 10, 12, 14, 46, 32, 16, 18, 36, 72, 124, 64, 128, 246, 520, 1040, 248, 521, 256, 512, 1024, 2080, 1042, 486, 1025, 1042, 2048, 4096].each do |num| %>
+        <div class="cell" onclick="checkMazeNumber(this)"><%= num %></div>
+      <% end %>
+    </div>
+    <p id="maze-message" class="mt-3"></p>
+    <p id="maze-message" class="mt-3"></p>
+<button id="restart-maze-btn" class="btn hidden mt-2" onclick="restartMaze()">🔁 Restart Maze</button>
+
+  </div>
+</div>
+
+<script>
+  // 🧠 Multiplication Logic (separated variables)
+  let mulNum1, mulNum2, mulCorrectAnswer, mulQuestionTimer, mulChallengeTimer;
+  let mulScore = 0, mulTotal = 0, mulTimeLeft = 60, mulAnswerTime = 5;
+  let mulWrongAnswers = [];
+
+  function startMulChallenge() {
+    clearInterval(mulChallengeTimer);
+    clearTimeout(mulQuestionTimer);
+    mulScore = 0;
+    mulTotal = 0;
+    mulTimeLeft = 60;
+    mulWrongAnswers = [];
+
+    document.getElementById('mul-final-score').classList.add('hidden');
+    document.getElementById('mul-review-section').classList.add('hidden');
+    document.getElementById('mul-wrong-list').innerHTML = '';
+    document.getElementById('mul-result').classList.add('hidden');
+    document.getElementById('mul-challenge').classList.remove('hidden');
+
+    startMulQuestion();
+
+    mulChallengeTimer = setInterval(() => {
+      mulTimeLeft--;
+      document.getElementById('mul-timer').innerText = `⏳ Time Left: ${mulTimeLeft}s`;
+      if (mulTimeLeft <= 0) {
+        clearInterval(mulChallengeTimer);
+        endMulChallenge();
+      }
+    }, 1000);
+  }
+
+  function startMulQuestion() {
+    mulNum1 = Math.floor(Math.random() * 13);
+    mulNum2 = Math.floor(Math.random() * 13);
+    mulCorrectAnswer = mulNum1 * mulNum2;
+
+    document.getElementById('mul-question').innerText = `What is ${mulNum1} × ${mulNum2}?`;
+    document.getElementById('mul-answer').value = '';
+    document.getElementById('mul-answer').focus();
+
+    clearTimeout(mulQuestionTimer);
+    mulQuestionTimer = setTimeout(() => {
+      checkMulAnswer(false);
+      if (mulTimeLeft > 0) startMulQuestion();
+    }, mulAnswerTime * 1000);
+  }
+
+  function submitMulAnswer() {
+    checkMulAnswer(true);
+    if (mulTimeLeft > 0) startMulQuestion();
+  }
+
+  function checkMulAnswer(submitted) {
+    clearTimeout(mulQuestionTimer);
+    mulTotal++;
+    const userAnswer = parseInt(document.getElementById('mul-answer').value, 10);
+    const result = document.getElementById('mul-result');
+
+    if (submitted && userAnswer === mulCorrectAnswer) {
+      mulScore++;
+      result.innerText = "✅ Correct!";
+    } else {
+      const wrong = submitted
+        ? `${mulNum1} × ${mulNum2} = ${mulCorrectAnswer} (You answered: ${userAnswer})`
+        : `${mulNum1} × ${mulNum2} = ${mulCorrectAnswer} (No answer)`;
+      mulWrongAnswers.push(wrong);
+      result.innerText = submitted
+        ? `❌ Incorrect! Correct answer was ${mulCorrectAnswer}`
+        : `⏰ Time is up! Correct answer was ${mulCorrectAnswer}`;
+    }
+
+    result.classList.remove('hidden');
+  }
+
+  function endMulChallenge() {
+    document.getElementById('mul-challenge').classList.add('hidden');
+    const percent = mulTotal > 0 ? Math.round((mulScore / mulTotal) * 100) : 0;
+    const summary = `🏁 Score: ${mulScore}/${mulTotal} — ✅ Correct Rate: ${percent}%`;
+    document.getElementById('mul-final-score').innerText = summary;
+    document.getElementById('mul-final-score').classList.remove('hidden');
+
+    if (mulWrongAnswers.length > 0) {
+      const list = document.getElementById('mul-wrong-list');
+      mulWrongAnswers.forEach(item => {
+        const li = document.createElement('li');
+        li.classList.add("list-group-item");
+        li.innerText = item;
+        list.appendChild(li);
+      });
+      document.getElementById('mul-review-section').classList.remove('hidden');
+    }
+  }
+
+  function checkMulEnter(e) {
+    if (e.key === "Enter") submitMulAnswer();
+  }
+
+  // 🧩 Maze Game
+  let mulCurrent = 0; // The number we expect to double from
+  let mazeActive = true; // Maze is active by default
+  
+  function checkMazeNumber(cell) {
+    if (!mazeActive || cell.classList.contains('correct')) return;
+  
+    const number = parseInt(cell.innerText);
+  
+    if ((mulCurrent === 0 && number === 1) || number === mulCurrent * 2) {
+      mulCurrent = number;
+      cell.classList.add('correct');
+      document.getElementById('maze-message').innerText = '';
+    } else {
+      cell.classList.add('incorrect');
+      mazeActive = false; // Freeze the maze
+      document.getElementById('maze-message').innerHTML = '❌ Wrong number!<br><strong>Click "Restart Maze" to try again.</strong>';
+      document.getElementById('restart-maze-btn').classList.remove('hidden');
+    }
+  
+    if (mulCurrent >= 4096) {
+      document.getElementById('maze-message').innerText = '🎉 Well done! You completed the maze!';
+      mazeActive = false;
+    }
+  }
+  
+  function restartMaze() {
+    mulCurrent = 0;
+    mazeActive = true;
+  
+    document.querySelectorAll('#maze .cell').forEach(cell => {
+      cell.classList.remove('correct', 'incorrect');
+    });
+  
+    document.getElementById('maze-message').innerText = '';
+    document.getElementById('restart-maze-btn').classList.add('hidden');
+  }
+  
+</script>

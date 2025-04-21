@@ -1,0 +1,132 @@
+<div class="addition-wrapper">
+  <header class="header-banner">
+    <h1>➕ Let Us Learn Addition! 🎯</h1>
+  </header>
+
+  <div class="btn-bar">
+    <%= link_to '🏠 Home', root_path, class: 'btn' %>
+  </div>
+
+  <div class="challenge-box">
+    <button class="btn start-btn" onclick="startAdditionChallenge()">▶️ Start Challenge</button>
+
+    <div id="add-challenge" class="hidden challenge-content">
+      <p id="add-question" class="question-text"></p>
+      <input type="number" id="add-answer" class="answer-input" onkeypress="checkAdditionEnter(event)" />
+      <button class="btn submit-btn" onclick="submitAdditionAnswer()">Submit</button>
+      <p id="add-timer" class="timer"></p>
+    </div>
+
+    <p id="add-result" class="hidden result-msg"></p>
+    <div id="add-final-score" class="hidden score-msg mt-4"></div>
+
+    <div id="add-review-section" class="hidden mt-4 text-start px-3">
+      <h4>❌ Review of Wrong Answers:</h4>
+      <ul id="add-wrong-list" class="list-group"></ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  let addNum1, addNum2, correctAdditionAnswer, addQuestionTimer, addChallengeTimer;
+  let addScore = 0;
+  let addTotal = 0;
+  let addTimeLeft = 60;
+  let addAnswerTime = 5;
+  let addWrongAnswers = [];
+
+  function startAdditionChallenge() {
+    clearInterval(addChallengeTimer);
+    clearTimeout(addQuestionTimer);
+
+    addScore = 0;
+    addTotal = 0;
+    addTimeLeft = 60;
+    addWrongAnswers = [];
+
+    document.getElementById('add-final-score').classList.add('hidden');
+    document.getElementById('add-review-section').classList.add('hidden');
+    document.getElementById('add-wrong-list').innerHTML = '';
+    document.getElementById('add-result').classList.add('hidden');
+
+    document.getElementById('add-challenge').classList.remove('hidden');
+
+    startAdditionQuestion();
+
+    addChallengeTimer = setInterval(() => {
+      addTimeLeft--;
+      document.getElementById('add-timer').innerText = `⏳ Time Left: ${addTimeLeft}s`;
+      if (addTimeLeft <= 0) {
+        clearInterval(addChallengeTimer);
+        endAdditionChallenge();
+      }
+    }, 1000);
+  }
+
+  function startAdditionQuestion() {
+    addNum1 = Math.floor(Math.random() * 50);
+    addNum2 = Math.floor(Math.random() * 50);
+    correctAdditionAnswer = addNum1 + addNum2;
+
+    document.getElementById('add-question').innerText = `What is ${addNum1} + ${addNum2}?`;
+    document.getElementById('add-answer').value = '';
+    document.getElementById('add-answer').focus();
+
+    clearTimeout(addQuestionTimer);
+    addQuestionTimer = setTimeout(() => {
+      checkAdditionAnswer(false);
+      if (addTimeLeft > 0) startAdditionQuestion();
+    }, addAnswerTime * 1000);
+  }
+
+  function submitAdditionAnswer() {
+    checkAdditionAnswer(true);
+    if (addTimeLeft > 0) startAdditionQuestion();
+  }
+
+  function checkAdditionAnswer(submitted) {
+    clearTimeout(addQuestionTimer);
+    addTotal++;
+    const userAnswer = parseInt(document.getElementById('add-answer').value, 10);
+    const result = document.getElementById('add-result');
+
+    if (submitted && userAnswer === correctAdditionAnswer) {
+      addScore++;
+      result.innerText = "✅ Correct!";
+    } else {
+      const wrong = submitted
+        ? `${addNum1} + ${addNum2} = ${correctAdditionAnswer} (You answered: ${userAnswer})`
+        : `${addNum1} + ${addNum2} = ${correctAdditionAnswer} (No answer)`;
+      addWrongAnswers.push(wrong);
+      result.innerText = submitted
+        ? `❌ Incorrect! Correct answer was ${correctAdditionAnswer}`
+        : `⏰ Time is up! Correct answer was ${correctAdditionAnswer}`;
+    }
+
+    result.classList.remove('hidden');
+  }
+
+  function endAdditionChallenge() {
+    document.getElementById('add-challenge').classList.add('hidden');
+
+    const percentage = addTotal > 0 ? Math.round((addScore / addTotal) * 100) : 0;
+    const summary = `🏁 Score: ${addScore}/${addTotal} — ✅ Correct Rate: ${percentage}%`;
+    document.getElementById('add-final-score').innerText = summary;
+    document.getElementById('add-final-score').classList.remove('hidden');
+
+    if (addWrongAnswers.length > 0) {
+      const list = document.getElementById('add-wrong-list');
+      addWrongAnswers.forEach(item => {
+        const li = document.createElement('li');
+        li.classList.add("list-group-item");
+        li.innerText = item;
+        list.appendChild(li);
+      });
+      document.getElementById('add-review-section').classList.remove('hidden');
+    }
+  }
+
+  function checkAdditionEnter(e) {
+    if (e.key === "Enter") submitAdditionAnswer();
+  }
+</script>

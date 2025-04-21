@@ -1,21 +1,32 @@
-<h1>Quiz Results</h1>
+<h1>📊 Quiz Results</h1>
 
 <p><strong>Total Score:</strong> <%= @total_score %> points</p>
 
-<h2>Summary:</h2>
-<p>Thank you for completing the quiz!</p>
-
-<% if @incorrect_questions.any? %>
-  <h3>Incorrect Questions:</h3>
-  <ul>
-    <% @incorrect_questions.each do |entry| %>
-      <li>
-        <strong>Question:</strong> <%= entry[:question].question_text %><br>
-        <strong>Your Answer:</strong> <%= entry[:user_answer] %><br>
-        <strong>Correct Answer:</strong> <%= entry[:question].correct_answer %>
-      </li>
-    <% end %>
-  </ul>
+<% if @results.any? %>
+  <table class="table table-bordered mt-4">
+    <thead class="table-light">
+      <tr>
+        <th>Question</th>
+        <th>Your Answer</th>
+        <th>Correct Answer</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @results.each do |result| %>
+        <tr class="<%= result[:is_correct] ? 'table-success' : 'table-danger' %>">
+          <td><%= result[:question_text] %></td>
+          <td><%= result[:user_answer] %></td>
+          <td><%= result[:correct_answer] %></td>
+          <td><%= result[:is_correct] ? '✅ Correct' : '❌ Incorrect' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 <% else %>
-  <p>Congratulations! All your answers were correct.</p>
+  <p>No results to display.</p>
 <% end %>
+
+<div class="mt-4">
+  <%= link_to '🔙 Back to Levels', quizzes_path, class: "btn btn-primary" %>
+</div>

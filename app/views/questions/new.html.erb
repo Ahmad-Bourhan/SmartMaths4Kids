@@ -1,11 +1,17 @@
-<% content_for :title, "New question" %>
+<% content_for :title, "New Question" %>
 
-<h1>New question</h1>
+<div class="container my-5">
+  <div class="card shadow-lg">
+    <div class="card-header bg-primary text-white">
+      <h2 class="mb-0">➕ Add a New Question</h2>
+    </div>
 
-<%= render "form", question: @question %>
+    <div class="card-body">
+      <%= render "form", question: @question %>
 
-<br>
+      <hr>
 
-<div>
-  <%= link_to "Back to questions", questions_path %>
+      <%= link_to "⬅️ Back to Questions", questions_path, class: "btn btn-outline-secondary" %>
+    </div>
+  </div>
 </div>

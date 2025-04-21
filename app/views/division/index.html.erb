@@ -1,0 +1,134 @@
+<div class="addition-wrapper">
+  <header class="header-banner">
+    <h1>➗ Let Us Learn Division! 🎯</h1>
+  </header>
+
+  <div class="btn-bar">
+    <%= link_to '🏠 Home', root_path, class: 'btn' %>
+  </div>
+
+  <div class="challenge-box">
+    <button class="btn start-btn" onclick="startChallenge()">▶️ Start Challenge</button>
+
+    <div id="challenge" class="hidden challenge-content">
+      <p id="question" class="question-text"></p>
+      <input type="number" id="answer" class="answer-input" onkeypress="checkEnter(event)" />
+      <button class="btn submit-btn" onclick="submitAnswer()">Submit</button>
+      <p id="timer" class="timer"></p>
+    </div>
+
+    <p id="result" class="hidden result-msg"></p>
+    <div id="final-score" class="hidden score-msg mt-4"></div>
+
+    <div id="review-section" class="hidden mt-4 text-start px-3">
+      <h4>❌ Review of Incorrect or Missed Answers:</h4>
+      <ul id="wrong-list" class="list-group"></ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  let num1, num2, correctAnswer, questionTimer, challengeTimer;
+  let score = 0;
+  let total = 0;
+  let timeLeft = 60;
+  let answerTime = 5;
+  let wrongAnswers = [];
+
+  function startChallenge() {
+    clearInterval(challengeTimer);
+    clearTimeout(questionTimer);
+
+    score = 0;
+    total = 0;
+    timeLeft = 60;
+    wrongAnswers = [];
+
+    document.getElementById('final-score').classList.add('hidden');
+    document.getElementById('review-section').classList.add('hidden');
+    document.getElementById('wrong-list').innerHTML = '';
+    document.getElementById('result').classList.add('hidden');
+
+    document.getElementById('challenge').classList.remove('hidden');
+
+    startQuestion();
+
+    challengeTimer = setInterval(() => {
+      timeLeft--;
+      document.getElementById('timer').innerText = `⏳ Time Left: ${timeLeft}s`;
+      if (timeLeft <= 0) {
+        clearInterval(challengeTimer);
+        endChallenge();
+      }
+    }, 1000);
+  }
+
+  function startQuestion() {
+    num1 = Math.floor(Math.random() * 100);
+    num2 = Math.floor(Math.random() * 9) + 1; // avoid 0
+    correctAnswer = Math.floor(num1 / num2);
+
+    document.getElementById('question').innerText = `What is ${num1} ÷ ${num2}? (Rounded down)`;
+    document.getElementById('answer').value = '';
+    document.getElementById('answer').focus();
+
+    clearTimeout(questionTimer);
+    questionTimer = setTimeout(() => {
+      checkAnswer(false);
+      if (timeLeft > 0) startQuestion();
+    }, answerTime * 1000);
+  }
+
+  function submitAnswer() {
+    checkAnswer(true);
+    if (timeLeft > 0) startQuestion();
+  }
+
+  function checkAnswer(submitted) {
+    clearTimeout(questionTimer);
+    total++;
+    const result = document.getElementById('result');
+    const userAnswer = parseInt(document.getElementById('answer').value, 10);
+
+    if (submitted && userAnswer === correctAnswer) {
+      score++;
+      result.innerText = '✅ Correct!';
+    } else {
+      const wrong = submitted
+        ? `${num1} ÷ ${num2} = ${correctAnswer} (You answered: ${userAnswer})`
+        : `${num1} ÷ ${num2} = ${correctAnswer} (No answer)`;
+      wrongAnswers.push(wrong);
+      result.innerText = submitted
+        ? `❌ Incorrect! Correct answer was ${correctAnswer}`
+        : `⏰ Time is up! Correct answer was ${correctAnswer}`;
+    }
+
+    result.classList.remove('hidden');
+  }
+
+  function endChallenge() {
+    clearInterval(challengeTimer);
+    document.getElementById('challenge').classList.add('hidden');
+
+    const incorrect = total - score;
+    const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+    const summary = `🏁 Score: ${score}/${total} — ✅ Correct: ${score} ❌ Incorrect: ${incorrect} — 🔢 Accuracy: ${percentage}%`;
+    document.getElementById('final-score').innerText = summary;
+    document.getElementById('final-score').classList.remove('hidden');
+
+    if (wrongAnswers.length > 0) {
+      const list = document.getElementById('wrong-list');
+      wrongAnswers.forEach(item => {
+        const li = document.createElement('li');
+        li.classList.add("list-group-item");
+        li.innerText = item;
+        list.appendChild(li);
+      });
+      document.getElementById('review-section').classList.remove('hidden');
+    }
+  }
+
+  function checkEnter(event) {
+    if (event.key === 'Enter') submitAnswer();
+  }
+</script>

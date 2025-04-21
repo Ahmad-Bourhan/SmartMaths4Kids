@@ -1,11 +1,18 @@
-<h1>Quiz: Level <%= @level %></h1>
+<div class="container my-5">
+  <h1 class="text-center mb-4">📝 Quiz: Level <%= @level %></h1>
 
-<%= form_with url: quiz_submit_all_path, method: :post do %>
-  <% @questions.each do |question| %>
-    <div>
-      <p><strong><%= question.question_text %></strong></p>
-      <%= text_field_tag "answers[#{question.id}]", nil, placeholder: "Your Answer" %>
+  <%= form_with url: quiz_submit_all_path, method: :post, local: true do %>
+    <% @questions.each_with_index do |question, index| %>
+      <div class="card mb-4 shadow-sm p-3">
+        <p class="mb-2"><strong>Q<%= index + 1 %>: <%= question.question_text %></strong></p>
+        <%= text_field_tag "answers[#{question.id}]", nil,
+              placeholder: "Type your answer...",
+              class: "form-control" %>
+      </div>
+    <% end %>
+
+    <div class="text-center mt-4">
+      <%= submit_tag "🚀 Submit Quiz", class: "btn btn-success btn-lg px-5" %>
     </div>
   <% end %>
-  <%= submit_tag "Submit Quiz" %>
-<% end %>
+</div>

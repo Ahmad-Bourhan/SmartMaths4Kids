@@ -1,0 +1,129 @@
+<div class="addition-wrapper">
+  <header class="header-banner">
+    <h1>🧩 Magic Square Puzzle</h1>
+  </header>
+
+  <div class="btn-bar mb-3">
+    <%= link_to '🏠 Home', root_path, class: 'btn btn-primary' %>
+  </div>
+
+  <div class="challenge-box">
+    <p class="mb-4">🧠 Fill the 3x3 grid using numbers <strong>1 to 9</strong> only once. Each row, column, and diagonal must sum to <strong>15</strong>.</p>
+
+    <table id="puzzle" class="mx-auto mb-3">
+      <% (0..2).each do |row| %>
+        <tr>
+          <% (0..2).each do |col| %>
+            <% index = row * 3 + col %>
+            <td>
+              <input type="text" id="cell-<%= index %>" maxlength="1" class="magic-input" oninput="validateInput(this)" />
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
+
+    <div class="text-center">
+      <button class="btn btn-success me-2" onclick="checkSolution()">✅ Check</button>
+      <button class="btn btn-warning" onclick="resetPuzzle()">🔁 Try Again</button>
+    </div>
+
+    <p id="result" class="result-msg mt-3 text-center fs-5 fw-bold"></p>
+  </div>
+</div>
+
+<audio id="successSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_7a203b7de3.mp3"></audio>
+
+<script>
+function validateInput(input) {
+  if (!/^[1-9]$/.test(input.value)) {
+    input.value = '';
+  }
+}
+
+function checkSolution() {
+  const cells = [];
+  for (let i = 0; i < 9; i++) {
+    const value = parseInt(document.getElementById(`cell-${i}`).value);
+    cells.push(value);
+  }
+
+  const resultEl = document.getElementById('result');
+
+  if (cells.includes(NaN)) {
+    resultEl.innerText = '❗ Please fill all the cells.';
+    resultEl.classList.remove("text-success");
+    resultEl.classList.add("text-danger");
+    return;
+  }
+
+  const unique = new Set(cells);
+  if (unique.size !== 9) {
+    resultEl.innerText = '❗ Use numbers 1 to 9 without repeating.';
+    resultEl.classList.remove("text-success");
+    resultEl.classList.add("text-danger");
+    return;
+  }
+
+  const lines = [
+    [cells[0], cells[1], cells[2]],
+    [cells[3], cells[4], cells[5]],
+    [cells[6], cells[7], cells[8]],
+    [cells[0], cells[3], cells[6]],
+    [cells[1], cells[4], cells[7]],
+    [cells[2], cells[5], cells[8]],
+    [cells[0], cells[4], cells[8]],
+    [cells[2], cells[4], cells[6]]
+  ];
+
+  for (let line of lines) {
+    if (line.reduce((a, b) => a + b, 0) !== 15) {
+      resultEl.innerText = '❌ Incorrect. Each line must sum to 15.';
+      resultEl.classList.remove("text-success");
+      resultEl.classList.add("text-danger");
+      return;
+    }
+  }
+
+  resultEl.innerText = '✅ Correct solution! Well done!';
+  resultEl.classList.remove("text-danger");
+  resultEl.classList.add("text-success");
+  document.getElementById('successSound').play();
+}
+
+function resetPuzzle() {
+  for (let i = 0; i < 9; i++) {
+    document.getElementById(`cell-${i}`).value = '';
+  }
+  document.getElementById('result').innerText = '';
+}
+</script>
+
+<style>
+  #puzzle {
+    border-collapse: collapse;
+  }
+
+  #puzzle td {
+    padding: 5px;
+  }
+
+  .magic-input {
+    width: 60px;
+    height: 60px;
+    font-size: 2em;
+    text-align: center;
+    border-radius: 10px;
+    border: 2px solid #aaa;
+  }
+
+  .magic-input:focus {
+    border-color: #2196f3;
+    outline: none;
+    box-shadow: 0 0 8px rgba(33, 150, 243, 0.6);
+  }
+
+  .result-msg {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+</style>

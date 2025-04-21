@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  get 'magic_reader', to: 'magic_reader#index'
+  get "game1", to: "game1#index"
+  get 'division', to: 'division#index'
+  get "multiplication", to: "multiplication#index"
+  get 'subtraction', to: 'subtraction#index'
+  get 'addition', to: 'addition#index'
+  get "numbers", to: "numbers#index"
+
 
   resources :scores
   resources :questions
