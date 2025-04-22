@@ -1,9 +1,12 @@
 require "test_helper"
 
 class ProfilesControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers 
+
   def setup
-    user = User.create!(email: "test@example.com", password: "password")
-    @profile = Profile.create!(user_id: user.id, first_name: "Ahmad", last_name: "Test", age: 30)
+    @user = User.create!(email: "test@example.com", password: "password")
+    sign_in @user
+    @profile = Profile.create!(user_id: @user.id, first_name: "Ahmad", last_name: "Test", age: 30)
   end
 
   test "should get index" do

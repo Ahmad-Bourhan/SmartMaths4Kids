@@ -223,5 +223,18 @@
   .hidden {
     display: none;
   }
+  .set {
+    background: #f9f9f9;
+    border-radius: 10px;
+    padding: 15px;
+    width: 220px;
+  }
+  .numbers {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .hidden {
+    display: none;
+  }
+  
   
   

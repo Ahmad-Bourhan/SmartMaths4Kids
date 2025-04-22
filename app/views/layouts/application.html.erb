@@ -14,13 +14,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet">
 
     <!-- Custom Style -->
-    
-    </style>
-
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "math_styles", media: "all", "data-turbo-track": "reload" %>
 
+    <!-- JavaScript Modules via Importmap -->
     <%= javascript_importmap_tags %>
+
+    <!-- ✅ Chart.js + Chartkick via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://www.chartkick.com/assets/chartkick.js"></script>
   </head>
 
   <body>

@@ -2,7 +2,7 @@ require "test_helper"
 
 class AdditionControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
-    get addition_index_url
+    get "/addition"
     assert_response :success
   end
 end
