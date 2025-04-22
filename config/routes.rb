@@ -30,5 +30,6 @@ Rails.application.routes.draw do
   post "quiz/start/:level", to: "quizzes#start", as: "quiz_start" # Start quiz for selected level
   get "quiz/questions", to: "quizzes#show_questions", as: "quiz_questions" # Show questions
   post "quiz/submit_all", to: "quizzes#submit_all", as: "quiz_submit_all"
-  get "quiz/results", to: "quizzes#results", as: "quiz_results"
+  get "quiz/results", to: "quizzes#results", as: "quiz_results", defaults: { format: :html }
+
 end
