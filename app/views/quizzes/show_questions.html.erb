@@ -1,7 +1,8 @@
 <div class="container my-5">
   <h1 class="text-center mb-4">📝 Quiz: Level <%= @level %></h1>
 
-  <%= form_with url: quiz_submit_all_path, method: :post, local: true do %>
+  <%= form_with url: quiz_submit_all_path, method: :post, local: true, data: { turbo: false } do %>
+
     <% @questions.each_with_index do |question, index| %>
       <div class="card mb-4 shadow-sm p-3">
         <p class="mb-2"><strong>Q<%= index + 1 %>: <%= question.question_text %></strong></p>
