@@ -69,7 +69,8 @@
     
 
     <!-- Placeholder for PDF certificate download -->
-    <%= link_to "🎓 Download Certificate", "#", class: "btn btn-success btn-lg px-4 disabled" %>
+    <%= link_to "🎓 Download Certificate", quiz_certificate_path(score: @total_score), class: "btn btn-success btn-lg px-4", target: "_blank" %>
+
   </div>
 
   <!-- Placeholder for chart section -->

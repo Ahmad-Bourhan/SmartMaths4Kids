@@ -37,6 +37,8 @@ gem "chartkick"
 gem "groupdate"
 
 gem "devise"
+gem 'prawn'
+
 
 
 group :development, :test do

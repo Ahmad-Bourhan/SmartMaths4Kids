@@ -57,5 +57,46 @@ class QuizzesController < ApplicationController
     Rails.logger.info "🔍 RESULTS DEBUG:"
     Rails.logger.info @results.inspect
   end
+  def certificate
+    require 'prawn'
+  
+    pdf = Prawn::Document.new
+  
+    # ✅ تسجيل كل أنماط الخط Amiri
+    pdf.font_families.update(
+      "Amiri" => {
+        normal:       Rails.root.join("app/assets/fonts/Amiri-Regular.ttf").to_s,
+        bold:         Rails.root.join("app/assets/fonts/Amiri-Bold.ttf").to_s,
+        italic:       Rails.root.join("app/assets/fonts/Amiri-Slanted.ttf").to_s,
+        bold_italic:  Rails.root.join("app/assets/fonts/Amiri-BoldSlanted.ttf").to_s
+      }
+    )
+  
+    # ✅ استخدام الخط
+    pdf.font("Amiri") do
+      pdf.text "Certificate of Completion", size: 28, style: :bold, align: :center
+      pdf.move_down 40
+  
+      pdf.text "This certifies that", align: :center, size: 18
+      pdf.move_down 10
+      pdf.text current_user.email.to_s, align: :center, size: 22, style: :bold
+      pdf.move_down 20
+  
+      pdf.text "has successfully completed the quiz", align: :center
+      pdf.move_down 10
+  
+      score = @total_score || params[:score]
+      pdf.text "Total Score: #{score} points", align: :center, size: 16
+      pdf.move_down 40
+  
+      pdf.text "Smart Maths4Kids", align: :center, size: 14, style: :italic
+      pdf.move_down 10
+      pdf.text Time.current.strftime("%B %d, %Y"), align: :center, size: 12
+    end
+  
+    send_data pdf.render, filename: "certificate.pdf", type: "application/pdf", disposition: "inline"
+  end
+  
+  
   
 end

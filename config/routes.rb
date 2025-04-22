@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   get 'subtraction', to: 'subtraction#index'
   get 'addition', to: 'addition#index'
   get "numbers", to: "numbers#index"
+  get "quiz/certificate", to: "quizzes#certificate", as: "quiz_certificate"
+
 
 
   resources :scores
