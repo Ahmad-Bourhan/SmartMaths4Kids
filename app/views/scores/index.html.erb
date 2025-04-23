@@ -1,16 +1,31 @@
-<p style="color: green"><%= notice %></p>
+<div class="container my-5">
+  <h2 class="text-center mb-4">📘 Your Quiz Results</h2>
 
-<% content_for :title, "Scores" %>
-
-<h1>Scores</h1>
-
-<div id="scores">
-  <% @scores.each do |score| %>
-    <%= render score %>
-    <p>
-      <%= link_to "Show this score", score %>
-    </p>
+  <% if @scores.any? %>
+    <table class="table table-bordered table-hover shadow-sm">
+      <thead class="table-primary text-center">
+        <tr>
+          <th>#</th>
+          <th>Total Score</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @scores.each_with_index do |score, index| %>
+          <tr class="text-center align-middle">
+            <td><%= index + 1 %></td>
+            <td><%= score.score %> points</td>
+            <td><%= score.created_at.strftime("%B %d, %Y") %></td>
+            <td>
+              <%= link_to "📊 View", quiz_results_path(total_score: score.score), class: "btn btn-outline-primary btn-sm" %>
+              <%= link_to "🎓 Certificate", quiz_certificate_path(score: score.score), class: "btn btn-outline-success btn-sm", target: "_blank" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p class="alert alert-info text-center">🚫 No quiz results yet. Try a quiz and come back!</p>
   <% end %>
 </div>
-
-<%= link_to "New score", new_score_path %>

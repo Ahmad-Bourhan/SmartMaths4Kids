@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_19_085746) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_23_021037) do
   create_table "profiles", force: :cascade do |t|
     t.integer "user_id"
     t.string "first_name"
@@ -35,6 +35,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_19_085746) do
     t.datetime "attempted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "total_score"
+    t.json "details"
     t.index ["user_id"], name: "index_scores_on_user_id"
   end
 

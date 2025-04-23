@@ -7,7 +7,7 @@
 
   <!-- Display total score -->
   <div class="alert alert-success text-center">
-    <h3>🏆 Total Score: <strong><%= @total_score %></strong> points</h3>
+    <h3>🏆 Total Score: <strong><%= @total_score %> / <%= @total_possible_score %></strong> points</h3>
   </div>
 
   <% if @results.present? %>
@@ -29,16 +29,9 @@
         <% @results.each_with_index do |result, index| %>
           <tr>
             <td><%= index + 1 %></td>
-            <!-- Show question text -->
             <td><%= result["question_text"] %></td>
-
-            <!-- Show user's answer, fallback to 'No Answer' -->
             <td><%= result["user_answer"].presence || "No Answer" %></td>
-
-            <!-- Show correct answer -->
             <td><%= result["correct_answer"] %></td>
-
-            <!-- Show result as correct or incorrect -->
             <td>
               <% if result["is_correct"] %>
                 <span class="text-success fw-bold">✅ Correct</span>
@@ -51,36 +44,24 @@
       </tbody>
     </table>
   <% else %>
-    <!-- If no results are found -->
     <p class="alert alert-warning text-center">⚠️ No results found!</p>
   <% end %>
 
-  <!-- Action buttons area -->
+  <!-- Action buttons -->
   <div class="text-center mt-5 d-flex flex-wrap justify-content-center gap-3">
-    <!-- Back to home button -->
     <%= link_to "🏠 Back to Home", root_path, class: "btn btn-primary btn-lg px-4" %>
-
-    <!-- Try quiz again button -->
     <%= link_to "🔁 Try Again", quiz_path, class: "btn btn-warning btn-lg px-4" %>
-
-    <!-- Print the results -->
     <%= button_to "🖨️ Print Results", "#", class: "btn btn-secondary btn-lg px-4", onclick: "window.print(); return false;" %>
-
-    
-
-    <!-- Placeholder for PDF certificate download -->
-    <%= link_to "🎓 Download Certificate", quiz_certificate_path(score: @total_score), class: "btn btn-success btn-lg px-4", target: "_blank" %>
-
+    <%= link_to "📊 View Chart", "#chart-section", class: "btn btn-info btn-lg px-4" %>
+    <%= link_to "🎓 Download Certificate", quiz_certificate_path(score: @total_score), class: "btn btn-success btn-lg px-4" %>
   </div>
 
-  <!-- Placeholder for chart section -->
+  <!-- Chart section -->
   <div id="chart-section" class="mt-5 text-center">
-   <h4 class="mt-5">📊 Correct vs Incorrect Answers</h4>
-
-<%= pie_chart [
-  ["Correct", @results.count { |r| r["is_correct"] }],
-  ["Incorrect", @results.count { |r| !r["is_correct"] }]
-] %>
-
+    <h4 class="mt-5">📊 Correct vs Incorrect Answers</h4>
+    <%= pie_chart [
+      ["Correct", @results.count { |r| r["is_correct"] }],
+      ["Incorrect", @results.count { |r| !r["is_correct"] }]
+    ] %>
   </div>
 </div>

@@ -1,14 +1,12 @@
 <%= link_to "Home", root_path %> &nbsp;
-<%= link_to "All questions", questions_path %> &nbsp;
+<%= link_to "All Questions", questions_path %> &nbsp;
 <%= link_to "Quiz", quiz_path %> &nbsp;
 
 <% if user_signed_in? %>
   <%= link_to "Profiles", profiles_path %> &nbsp;
-  <%= button_to "Sign out", destroy_user_session_path, method: :delete %>
-
+  <%= link_to "📘 My Results", scores_path %> &nbsp;
+  <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-link p-0" %>
 <% else %>
-  <%= link_to "Sign in", new_user_session_path %> &nbsp;
- <%= link_to "Sign out", destroy_user_session_path, method: :delete, data: { turbo: false } %>
-
+  <%= link_to "Sign In", new_user_session_path %> &nbsp;
+  <%= link_to "Sign Up", new_user_registration_path %> &nbsp;
 <% end %>
-
