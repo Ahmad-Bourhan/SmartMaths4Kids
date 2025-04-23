@@ -1,7 +1,11 @@
 require "test_helper"
 
 class ScoresControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    @user = users(:one)
+    sign_in @user
     @score = scores(:one)
   end
 
@@ -17,7 +21,13 @@ class ScoresControllerTest < ActionDispatch::IntegrationTest
 
   test "should create score" do
     assert_difference("Score.count") do
-      post scores_url, params: { score: { attempted_at: @score.attempted_at, score: @score.score, user_id: @score.user_id } }
+      post scores_url, params: {
+        score: {
+          user_id: @user.id,
+          score: 10,
+          attempted_at: Time.current
+        }
+      }
     end
 
     assert_redirected_to score_url(Score.last)
@@ -34,7 +44,13 @@ class ScoresControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update score" do
-    patch score_url(@score), params: { score: { attempted_at: @score.attempted_at, score: @score.score, user_id: @score.user_id } }
+    patch score_url(@score), params: {
+      score: {
+        user_id: @user.id,
+        score: 20,
+        attempted_at: Time.current
+      }
+    }
     assert_redirected_to score_url(@score)
   end
 

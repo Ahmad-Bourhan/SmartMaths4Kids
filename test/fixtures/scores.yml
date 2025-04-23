@@ -2,10 +2,10 @@
 
 one:
   user: one
-  score: 1
-  attempted_at: 2024-12-16 01:18:31
+  score: 5
+  attempted_at: <%= Time.current %>
 
 two:
-  user: two
-  score: 1
-  attempted_at: 2024-12-16 01:18:31
+  user: one
+  score: 7
+  attempted_at: <%= Time.current %>
