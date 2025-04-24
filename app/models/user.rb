@@ -6,5 +6,12 @@ class User < ApplicationRecord
 
   has_many :scores, dependent: :destroy
   has_one :profile, dependent: :destroy
+  def admin?
+    role == "admin"
+  end
+
+  def regular?
+    role == "user"
+  end
 
 end

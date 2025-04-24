@@ -18,8 +18,11 @@
             <td><%= score.score %> points</td>
             <td><%= score.created_at.strftime("%B %d, %Y") %></td>
             <td>
-              <%= link_to "📊 View", quiz_results_path(total_score: score.score), class: "btn btn-outline-primary btn-sm" %>
-              <%= link_to "🎓 Certificate", quiz_certificate_path(score: score.score), class: "btn btn-outline-success btn-sm", target: "_blank" %>
+              <%= link_to "📊 View", quiz_results_path(total_score: score.score), class: "btn btn-outline-primary btn-sm mb-1" %>
+              <%= link_to "🎓 Certificate", quiz_certificate_path(score: score.score), class: "btn btn-outline-success btn-sm mb-1", target: "_blank" %>
+              <% if current_user.admin? %>
+                <%= button_to "🗑️ Delete", score_path(score), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-outline-danger btn-sm" %>
+              <% end %>
             </td>
           </tr>
         <% end %>

@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :set_question, only: %i[ show edit update destroy ]
+  before_action :authenticate_admin!
 
   # GET /questions or /questions.json
   def index
@@ -74,4 +75,12 @@ class QuestionsController < ApplicationController
     def question_params
       params.require(:question).permit(:question_text, :difficulty_level, :correct_answer, :mark)
     end
+    private
+
+def authenticate_admin!
+  unless current_user&.admin?
+    redirect_to root_path, alert: "You are not authorized to access this page."
+  end
+end
+
 end

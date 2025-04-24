@@ -1,7 +1,11 @@
 require "test_helper"
 
 class QuestionsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    @admin = users(:admin) 
+    sign_in @admin
     @question = questions(:one)
   end
 
