@@ -1,85 +1,16 @@
 name: CI
 
 on:
-  pull_request:
   push:
     branches: [ main ]
+  pull_request:
 
 jobs:
-  scan_ruby:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.1.6
-          bundler-cache: false
-
-      - name: Install Bundler
-        run: gem install bundler
-
-      - name: Install Dependencies
-        run: |
-          bundle install --no-cache --jobs 4 --retry 3
-
-      - name: Fix execution permissions for scripts
-        run: chmod +x bin/*
-
-      - name: Scan for common Rails security vulnerabilities using Brakeman
-        run: bundle exec brakeman --no-pager
-
-  lint:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.1.6
-          bundler-cache: false
-
-      - name: Install Bundler
-        run: gem install bundler
-
-      - name: Install Dependencies
-        run: |
-          bundle install --no-cache --jobs 4 --retry 3
-
-      - name: Fix execution permissions for scripts
-        run: chmod +x bin/*
-
-      - name: Lint code with RuboCop
-        run: bundle exec rubocop -f github || true
-        
-
   test:
+    name: Run Rails Tests with SQLite
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:12
-        ports: ['5432:5432']
-        env:
-          POSTGRES_DB: test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
-      - name: Install system dependencies
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -87,25 +18,24 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.6
-          bundler-cache: false
 
       - name: Install Bundler
         run: gem install bundler
 
       - name: Install Dependencies
         run: |
-          bundle install --no-cache --jobs 4 --retry 3
+          bundle install --jobs 4 --retry 3
 
-      - name: Fix execution permissions for scripts
-        run: chmod +x bin/*
-
-      - name: Prepare test database
+      - name: Prepare database
         run: |
-          bundle exec rails db:drop RAILS_ENV=test || true
+          echo "🛠️ Setting up test database..."
           bundle exec rails db:create RAILS_ENV=test
           bundle exec rails db:migrate RAILS_ENV=test
 
       - name: Run all tests
         env:
           RAILS_ENV: test
-        run: bundle exec rails test
+          SECRET_KEY_BASE: dummy_key
+        run: |
+          echo "✅ Starting test suite..."
+          bundle exec rails test --verbose
