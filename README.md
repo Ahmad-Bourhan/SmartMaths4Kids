@@ -1,25 +1,34 @@
-# README
+# SmartMaths4Kids 🎓🧮
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+**SmartMaths4Kids** is a fun and interactive web-based learning platform designed for children aged 5 to 12.  
+It offers quizzes, challenges, and certificates to make learning math enjoyable and rewarding.
 
-Things you may want to cover:
+## Features ✨
+- User registration and login system (with Devise)
+- Multiple quiz categories: Numbers, Addition, Subtraction, Multiplication, Division
+- Unique challenges: Magic Square Puzzle & Magic Mind Reader
+- Instant feedback with score and percentage calculation
+- Personalized PDF certificates after quiz completion
+- Admin panel to manage questions and scores
+- Visual results with pie charts using Chartkick + Chart.js
+- Fully responsive interface (Bootstrap 5)
 
-* Ruby version
+## Technologies Used 🛠️
+- Ruby on Rails 7.1
+- PostgreSQL
+- Bootstrap 5
+- Chartkick + Chart.js
+- Devise for authentication
+- Prawn or WickedPDF for certificate generation
 
-* System dependencies
+## Installation 🚀
 
-* Configuration
+To run the project locally:
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-"# SmartMaths4Kids" 
+```bash
+git clone https://github.com/Ahmad-Bourhan/SmartMaths4Kids.git
+cd SmartMaths4Kids
+bundle install
+rails db:create
+rails db:migrate
+rails server
